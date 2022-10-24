@@ -17,13 +17,6 @@ config :poolDay, PoolDayWeb.Endpoint,
   pubsub_server: PoolDay.PubSub,
   live_view: [signing_salt: "/qftU4Om"]
 
-# FIXE: update with your database config
-config :friends, Friends.Repo,
-  database: "time_manager",
-  username: "postgres",
-  password: "",
-  hostname: "localhost"
-
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
