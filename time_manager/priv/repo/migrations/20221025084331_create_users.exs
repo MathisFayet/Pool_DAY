@@ -9,7 +9,8 @@ defmodule TimeManager.Repo.Migrations.CreateUsers do
       timestamps()
     end
 
-    create index(:users, :username)
+    create index(:users, [:username], unique: true)
+    create index(:users, [:email], unique: true)
 
   end
 end
