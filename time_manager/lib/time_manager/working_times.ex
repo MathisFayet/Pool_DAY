@@ -35,7 +35,9 @@ defmodule TimeManager.WorkingTimes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_working_time!(id), do: Repo.get!(WorkingTime, id)
+  def get_working_time!(id) do
+    Repo.get!(WorkingTime, id)
+  end
 
   @doc """
   Gets a single working_time by userId.
@@ -51,8 +53,9 @@ defmodule TimeManager.WorkingTimes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_working_time_by_user_id!(userId), do: Repo.get_by!(WorkingTime, [user: userId])
-
+  def get_working_time_by_user_id!(userId) do
+    Repo.get_by!(WorkingTime, [user: userId])
+  end
 
   @doc """
   Gets a single working_time by userId and by id.
@@ -68,7 +71,9 @@ defmodule TimeManager.WorkingTimes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_working_time_by_user_id_and_id!(userId, id), do: Repo.get_by!(WorkingTime, [user: userId, id: id])
+  def get_working_time_by_user_id_and_id!(userId, id) do
+    Repo.get_by!(WorkingTime, [user: userId, id: id])
+  end
 
   @doc """
   Creates a working_time.
