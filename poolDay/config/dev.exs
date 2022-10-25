@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :poolDay, PoolDay.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "parfait",
+  password: "root",
   hostname: "localhost",
   database: "poolday_dev",
   stacktrace: true,
