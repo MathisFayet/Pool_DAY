@@ -1,8 +1,8 @@
-defmodule TimeManager.Schemas.User do
+defmodule TimeManager.Schemas.Users do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "user" do
+  schema "users" do
     field :username, :string
     field :email, :string
 
