@@ -1,4 +1,4 @@
-defmodule EctoAssoc.Users do
+defmodule Schemas.Users do
   use Ecto.Schema
 
   schema "users" do
