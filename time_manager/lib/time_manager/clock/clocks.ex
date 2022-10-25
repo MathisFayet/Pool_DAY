@@ -1,4 +1,4 @@
-defmodule TimeManager.Schemas.Clocks do
+defmodule TimeManager.Clock.Clocks do
   use Ecto.Schema
   import Ecto.Changeset
 
