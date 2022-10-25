@@ -1,39 +1,43 @@
 defmodule TimeManagerWeb.UserController do
-
-  @moduledoc """
-    User controller
-  """
-
-  @doc """
-    - index - renders a list of all items of the given resource type
-    - show - renders an individual item by ID
-    - new - renders a form for creating a new item
-    - create - receives parameters for one new item and saves it in a data store
-    - edit - retrieves an individual item by ID and displays it in a form for editing
-    - update - receives parameters for one edited item and saves the item to a data store
-    - delete - receives an ID for an item to be deleted and deletes it from a data store
-  """
-
   use TimeManagerWeb, :controller
 
-  def index() do
+  alias TimeManager.Accounts
+  alias TimeManager.Accounts.User
+
+  action_fallback TimeManagerWeb.FallbackController
+
+  def index(conn, _params) do
+    users = Accounts.list_users()
+    render(conn, "index.json", users: users)
   end
 
-  def show() do
+  def create(conn, %{"user" => user_params}) do
+    with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.user_path(conn, :show, user))
+      |> render("show.json", user: user)
+    end
   end
 
-  def new() do
+  def show(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
+    render(conn, "show.json", user: user)
   end
 
-  def create() do
+  def update(conn, %{"id" => id, "user" => user_params}) do
+    user = Accounts.get_user!(id)
+
+    with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
+      render(conn, "show.json", user: user)
+    end
   end
 
-  def edit() do
-  end
+  def delete(conn, %{"id" => id}) do
+    user = Accounts.get_user!(id)
 
-  def update() do
-  end
-
-  def delete() do
+    with {:ok, %User{}} <- Accounts.delete_user(user) do
+      send_resp(conn, :no_content, "")
+    end
   end
 end
