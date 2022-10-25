@@ -10,6 +10,8 @@ defmodule TimeManager.Repo.Migrations.CreateWorkingtimes do
       timestamps()
     end
 
+    create index(:workingtimes, [:start])
+    create index(:workingtimes, [:end])
     create index(:workingtimes, [:user])
   end
 end
