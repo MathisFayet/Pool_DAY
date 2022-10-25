@@ -1,4 +1,4 @@
-defmodule TimeManager.Schemas.Workingtimes do
+defmodule TimeManager.WorkingTimes.WorkingTime do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -11,8 +11,8 @@ defmodule TimeManager.Schemas.Workingtimes do
   end
 
   @doc false
-  def changeset(workingtimes, attrs) do
-    workingtimes
+  def changeset(working_time, attrs) do
+    working_time
     |> cast(attrs, [:start, :end])
     |> validate_required([:start, :end])
   end
