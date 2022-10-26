@@ -5,6 +5,8 @@ defmodule TimeManager.Accounts do
 
   import Ecto.Query, warn: false
   alias TimeManager.Repo
+  alias TimeManager.Clock
+  alias TimeManager.WorkingTimes
 
   alias TimeManager.Accounts.User
 
@@ -118,6 +120,8 @@ defmodule TimeManager.Accounts do
 
   """
   def delete_user(%User{} = user) do
+#    Repo.delete_all(WorkingTime, [user: userId])
+#    Repo.delete_all(Clocks, [user: userId])
     Repo.delete(user)
   end
 

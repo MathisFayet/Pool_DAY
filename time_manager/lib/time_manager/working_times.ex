@@ -54,7 +54,8 @@ defmodule TimeManager.WorkingTimes do
 
   """
   def get_working_time_by_user_id!(userId) do
-    Repo.get_by!(WorkingTime, [user: userId])
+    q = from wkTm in WorkingTime, where: wkTm.user == ^userId
+    Repo.all(q)
   end
 
   @doc """
@@ -72,7 +73,8 @@ defmodule TimeManager.WorkingTimes do
 
   """
   def get_working_time_by_user_id_and_id!(userId, id) do
-    Repo.get_by!(WorkingTime, [user: userId, id: id])
+    q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.id == ^id
+    Repo.all(q)
   end
 
   @doc """
