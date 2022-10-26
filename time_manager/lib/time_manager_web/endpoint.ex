@@ -1,4 +1,17 @@
+defmodule TimeManagerWeb.CORS do
+  use Corsica.Router,
+      origins: ["*"],
+      allow_credentials: true,
+      max_age: 600,
+      allow_headers: :all
+
+  resource "/public/*", origins: "*"
+  resource "/*"
+end
+
+
 defmodule TimeManagerWeb.Endpoint do
+
   use Phoenix.Endpoint, otp_app: :time_manager
 
   # The session will be stored in the cookie and signed,
@@ -9,6 +22,9 @@ defmodule TimeManagerWeb.Endpoint do
     key: "_time_manager_key",
     signing_salt: "3xcRhx/y"
   ]
+
+  plug TimeManager.CORS
+
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
