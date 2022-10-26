@@ -11,4 +11,4 @@ seed:
 	mix run priv/repo/seeds.exs
 
 .phony:
-	seed
+	seed run migration drop_database
