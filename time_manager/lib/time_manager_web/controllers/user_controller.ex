@@ -7,7 +7,6 @@ defmodule TimeManagerWeb.UserController do
   action_fallback TimeManagerWeb.FallbackController
 
   def index(conn,  params) do
-#  def index(conn,  %{"email" => email, "username" => username}) do
     email = Map.get(params, "email", nil)
     username = Map.get(params, "username", nil)
 

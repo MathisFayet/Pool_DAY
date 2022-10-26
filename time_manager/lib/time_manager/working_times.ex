@@ -53,9 +53,22 @@ defmodule TimeManager.WorkingTimes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_working_time_by_user_id!(userId) do
-    q = from wkTm in WorkingTime, where: wkTm.user == ^userId
-    Repo.all(q)
+  def get_working_time_by_user_id!(userId, startDate, endDate) do
+
+    cond do
+      startDate == nil and endDate == nil ->
+        q = from wkTm in WorkingTime, where: wkTm.user == ^userId
+        Repo.all(q)
+      startDate == nil and endDate != nil ->
+        q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.end <= ^endDate
+        Repo.all(q)
+      startDate != nil and endDate == nil ->
+        q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.start >= ^startDate
+        Repo.all(q)
+      startDate != nil and endDate != nil ->
+        q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.start >= ^startDate and wkTm.end <= ^endDate
+        Repo.all(q)
+    end
   end
 
   @doc """

@@ -51,7 +51,8 @@ defmodule TimeManager.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:faker, "~> 0.17"},
       {:plug, "~> 1.0"},
-      {:corsica, "~> 1.0"}
+      {:corsica, "~> 1.0"},
+      {:timex, "~> 3.0"}
     ]
   end
 

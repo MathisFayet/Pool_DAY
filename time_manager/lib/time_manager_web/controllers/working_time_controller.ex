@@ -6,13 +6,33 @@ defmodule TimeManagerWeb.WorkingTimeController do
 
   action_fallback TimeManagerWeb.FallbackController
 
-  def index(conn, %{"userID" => userId}) do
-    workingtimes = WorkingTimes.get_working_time_by_user_id!(userId)
+  def index(conn, params) do
+    userId = Map.get(params, "userID", nil)
+    startDateStr = Map.get(params, "start", nil)
+    endDateStr = Map.get(params, "end", nil)
+    formatDateStr = "%Y%m%d%H%M%S"
+    #    formatDateStr = "{YYYY}{MM}{DD}{hh}{mm}{ss}"
+    startDate =
+      if startDateStr != nil do
+        Timex.parse!(startDateStr, formatDateStr, :strftime)
+      else
+        nil
+      end
+
+    endDate =
+      if(endDateStr != nil) do
+        Timex.parse!(endDateStr, formatDateStr, :strftime)
+      else
+        nil
+      end
+
+    workingtimes = WorkingTimes.get_working_time_by_user_id!(userId, startDate, endDate)
     render(conn, "index.json", workingtimes: workingtimes)
   end
 
   def create(conn, %{"userID" => userId, "working_time" => working_time_params}) do
-    with {:ok, %WorkingTime{} = working_time} <- WorkingTimes.create_working_time(userId, working_time_params) do
+    with {:ok, %WorkingTime{} = working_time} <-
+           WorkingTimes.create_working_time(userId, working_time_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.working_time_path(conn, :show, working_time))
@@ -28,7 +48,8 @@ defmodule TimeManagerWeb.WorkingTimeController do
   def update(conn, %{"id" => id, "working_time" => working_time_params}) do
     working_time = WorkingTimes.get_working_time!(id)
 
-    with {:ok, %WorkingTime{} = working_time} <- WorkingTimes.update_working_time(working_time, working_time_params) do
+    with {:ok, %WorkingTime{} = working_time} <-
+           WorkingTimes.update_working_time(working_time, working_time_params) do
       render(conn, "show.json", working_time: working_time)
     end
   end
