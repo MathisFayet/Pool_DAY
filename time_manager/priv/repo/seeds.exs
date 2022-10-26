@@ -9,16 +9,18 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-import Faker
 
 alias TimeManager.Repo
 alias TimeManager.Accounts.User
 alias TimeManager.Clock.Clocks
 alias TimeManager.WorkingTimes.WorkingTime
-alias Faker.Internet
 
 Faker.start()
 # Create a user
+
+Repo.delete_all(WorkingTime)
+Repo.delete_all(Clocks)
+Repo.delete_all(User)
 for _ <- 1..100 do
   user = %User{
     email: Faker.Internet.email(),
@@ -31,7 +33,7 @@ for _ <- 1..100 do
   clock = %Clocks{
     user: user.id,
     time: Faker.DateTime.forward(0),
-    status: Faker.Boolean.boolean()
+    status: :rand.uniform(2) == 1
   }
 
   Repo.insert!(clock)
