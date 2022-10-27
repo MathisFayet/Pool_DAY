@@ -22,6 +22,12 @@ defmodule TimeManagerWeb.ClocksController do
 
   def show(conn, %{"userID" => userId}) do
     clocks = Clock.get_clocks_by_userId!(userId)
+    render(conn, "index.json", clocks: clocks)
+
+  end
+
+  def showLast(conn, %{"userID" => userId}) do
+    clocks = Clock.get_last_clocks_by_user_id(userId)
     render(conn, "show.json", clocks: clocks)
   end
 
