@@ -69,8 +69,8 @@ defmodule TimeManager.Clock do
       iex> do_clocks_by_user_id!(456)
 
   """
-  def do_clocks_by_user_id(userId, status, oldClock) do
-    clock_time = DateTime.utc_now()
+  def do_clocks_by_user_id(userId, status, oldClock, now_time) do
+    clock_time = if now_time == nil do  DateTime.utc_now() else now_time end
     if(status == false and oldClock != nil) do
       working_time = %WorkingTime{
         user_id: userId,

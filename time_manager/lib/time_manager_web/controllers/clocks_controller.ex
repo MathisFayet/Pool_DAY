@@ -16,7 +16,7 @@ defmodule TimeManagerWeb.ClocksController do
 
     cond do
       lastClock == nil or (lastClock != nil and lastClock.status == false) ->
-        with {:ok, %Clocks{} = clocks} <- Clock.do_clocks_by_user_id(String.to_integer(userId), true, nil) do
+        with {:ok, %Clocks{} = clocks} <- Clock.do_clocks_by_user_id(String.to_integer(userId), true, nil, nil) do
           conn
           |> put_status(:created)
           |> put_resp_header("location", Routes.clocks_path(conn, :show, clocks))
@@ -24,7 +24,7 @@ defmodule TimeManagerWeb.ClocksController do
         end
       lastClock != nil and lastClock.status == true ->
 
-        with {:ok, %Clocks{} = clocks} <- Clock.do_clocks_by_user_id(String.to_integer(userId), false, lastClock) do
+        with {:ok, %Clocks{} = clocks} <- Clock.do_clocks_by_user_id(String.to_integer(userId), false, lastClock, nil) do
           conn
           |> put_status(:created)
           |> put_resp_header("location", Routes.clocks_path(conn, :show, clocks))

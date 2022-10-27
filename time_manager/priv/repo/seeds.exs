@@ -13,6 +13,7 @@
 alias TimeManager.Repo
 alias TimeManager.Accounts.User
 alias TimeManager.Clock.Clocks
+alias TimeManager.Clock
 alias TimeManager.WorkingTimes.WorkingTime
 
 Faker.start()
@@ -38,22 +39,22 @@ for _ <- 1..10 do
 
   Repo.insert!(clock)
 
-  working_time_number = :random.uniform(15)
+  working_time_number = :random.uniform(30)
 
   for i <- 0..working_time_number do
-    IO.puts("Creating working time #{i} for user #{user.id}")
+    IO.puts("Simulation clocking action #{i} for user #{user.id}")
+    lastClock = Clock.get_last_clocks_by_user_id(user.id)
+    now_time = Faker.DateTime.forward(0)
 
-    start_date = Faker.DateTime.backward(365)
-    end_date = start_date |> DateTime.add(24*60*60, :second)
-    end_date = Faker.DateTime.between(start_date, end_date)
+    cond do
 
-    working_time = %WorkingTime{
-      user: user,
-      start: start_date,
-      end: end_date,
-    }
+      lastClock == nil or (lastClock != nil and lastClock.status == false) ->
+        Clock.do_clocks_by_user_id(user.id, true, nil, now_time)
 
-    Repo.insert!(working_time)
+      lastClock != nil and lastClock.status == true ->
+        Clock.do_clocks_by_user_id(user.id, false, lastClock, now_time)
+    end
+
   end
 
 end
