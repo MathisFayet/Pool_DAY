@@ -22,7 +22,7 @@ Faker.start()
 Repo.delete_all(WorkingTime)
 Repo.delete_all(Clocks)
 Repo.delete_all(User)
-for _ <- 1..10 do
+for _ <- 1..1 do
   user = %User{
     email: Faker.Internet.email(),
     username: Faker.Internet.user_name()
@@ -39,20 +39,30 @@ for _ <- 1..10 do
 
   Repo.insert!(clock)
 
-  working_time_number = :random.uniform(30)
+  working_time_number = :random.uniform(1)
 
   for i <- 0..working_time_number do
     IO.puts("Simulation clocking action #{i} for user #{user.id}")
     lastClock = Clock.get_last_clocks_by_user_id(user.id)
-    now_time = Faker.DateTime.forward(0)
+    nb_day_backward = :random.uniform(365)
+    clockIn_time = Faker.DateTime.backward(nb_day_backward)
+    IO.puts("time IN #{clockIn_time}")
+
+    clockInHour = :random.uniform(24)
+    clockIn_time = Map.put(clockIn_time, "hour", clockInHour)
+#    clockOut_time = Faker.DateTime.backward(nb_day_backward)
+    clockOutHour = Enum.random(clockInHour..24)
+    clockOut_time = Map.put(clockIn_time, "hour", clockOutHour)
+    clockOut_time = Map.put(clockIn_time, "minute", Enum.random(0..59))
+    IO.puts("time OUT #{clockOut_time}")
 
     cond do
 
       lastClock == nil or (lastClock != nil and lastClock.status == false) ->
-        Clock.do_clocks_by_user_id(user.id, true, nil, now_time)
+        Clock.do_clocks_by_user_id(user.id, true, nil, clockIn_time)
 
       lastClock != nil and lastClock.status == true ->
-        Clock.do_clocks_by_user_id(user.id, false, lastClock, now_time)
+        Clock.do_clocks_by_user_id(user.id, false, lastClock, clockOut_time)
     end
 
   end
