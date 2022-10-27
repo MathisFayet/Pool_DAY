@@ -1,5 +1,6 @@
 drop_database:
 	mix ecto.drop
+	mix ecto.create
 
 migration:
 	mix ecto.migrate
@@ -13,5 +14,10 @@ seed:
 get_deps:
 	mix deps.get
 
+reset:
+	make drop_database
+	make migration
+	make seed
+
 .phony:
-	seed run migration drop_database get_deps
+	seed run migration drop_database get_deps reset
