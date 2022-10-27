@@ -51,7 +51,7 @@ defmodule TimeManager.Clock do
       ** (Ecto.NoResultsError)
 
   """
-  def get_clocks_by_userId!(userId), do: Repo.get_by!(Clocks, user: userId)
+  def get_clocks_by_userId!(userId), do: Repo.get_by!(Clocks, user_id: userId)
 
   @doc """
   Creates a clocks.
