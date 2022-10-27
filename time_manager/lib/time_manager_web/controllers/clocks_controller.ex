@@ -11,12 +11,25 @@ defmodule TimeManagerWeb.ClocksController do
     render(conn, "index.json", clocks: clocks)
   end
 
-  def create(conn, %{"userID" => userId, "clocks" => clocks_params}) do
-    with {:ok, %Clocks{} = clocks} <- Clock.create_clocks(clocks_params, userId) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.clocks_path(conn, :show, clocks))
-      |> render("show.json", clocks: clocks)
+  def create(conn, %{"userID" => userId}) do
+    lastClock = Clock.get_last_clocks_by_user_id(userId)
+
+    cond do
+      lastClock == nil or (lastClock != nil and lastClock.status == false) ->
+        with {:ok, %Clocks{} = clocks} <- Clock.do_clocks_by_user_id(String.to_integer(userId), true, nil) do
+          conn
+          |> put_status(:created)
+          |> put_resp_header("location", Routes.clocks_path(conn, :show, clocks))
+          |> render("show.json", clocks: clocks)
+        end
+      lastClock != nil and lastClock.status == true ->
+
+        with {:ok, %Clocks{} = clocks} <- Clock.do_clocks_by_user_id(String.to_integer(userId), false, lastClock) do
+          conn
+          |> put_status(:created)
+          |> put_resp_header("location", Routes.clocks_path(conn, :show, clocks))
+          |> render("show.json", clocks: clocks)
+        end
     end
   end
 

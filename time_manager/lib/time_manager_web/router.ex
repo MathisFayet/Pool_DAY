@@ -50,6 +50,7 @@ defmodule TimeManagerWeb.Router do
 
     # clocks routes
     get "/clocks/:userID", ClocksController, :show
+    get "/clocks/last/:userID", ClocksController, :showLast
     post "/clocks/:userID", ClocksController, :create
 
   end

@@ -5,6 +5,8 @@ defmodule TimeManager.Clock do
 
   import Ecto.Query, warn: false
   alias TimeManager.Repo
+  alias TimeManager.Accounts.User
+  alias TimeManager.WorkingTimes.WorkingTime
 
   alias TimeManager.Clock.Clocks
 
@@ -51,7 +53,54 @@ defmodule TimeManager.Clock do
       ** (Ecto.NoResultsError)
 
   """
-  def get_clocks_by_userId!(userId), do: Repo.get_by!(Clocks, user_id: userId)
+  def get_clocks_by_userId!(userId) do
+    q = from clock in Clocks, where: clock.user_id == ^userId
+    Repo.all(q)
+  end
+
+  @doc """
+  Do a clock in by user id.
+
+  ## Examples
+
+      iex> do_clocks_by_user_id!(123)
+      %Clocks{}
+
+      iex> do_clocks_by_user_id!(456)
+
+  """
+  def do_clocks_by_user_id(userId, status, oldClock) do
+    clock_time = DateTime.utc_now()
+    if(status == false and oldClock != nil) do
+      working_time = %WorkingTime{
+        user_id: userId,
+        start: oldClock.time,
+        end: clock_time,
+      }
+      Repo.insert!(working_time)
+    end
+    attrs = %{time: clock_time, user_id: userId, status: status}
+
+    %Clocks{}
+    |> Clocks.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Get the last clock by user id.
+
+  ## Examples
+
+      iex> get_last_clocks_by_user_id(123)
+      %Clocks{}
+
+      iex> get_last_clocks_by_user_id(456)
+
+  """
+  def get_last_clocks_by_user_id(userId) do
+    Repo.one(from clock in TimeManager.Clock.Clocks, order_by: fragment("? DESC", clock.inserted_at), where: clock.user_id == ^userId, limit: 1)
+  end
+
 
   @doc """
   Creates a clocks.
