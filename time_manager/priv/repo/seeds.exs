@@ -22,7 +22,7 @@ Faker.start()
 Repo.delete_all(WorkingTime)
 Repo.delete_all(Clocks)
 Repo.delete_all(User)
-for _ <- 1..1 do
+for _ <- 1..10 do
   user = %User{
     email: Faker.Internet.email(),
     username: Faker.Internet.user_name()
@@ -39,7 +39,7 @@ for _ <- 1..1 do
 
   Repo.insert!(clock)
 
-  working_time_number = :random.uniform(1)
+  working_time_number = :random.uniform(30)
 
   for i <- 0..working_time_number do
     IO.puts("Simulation clocking action #{i} for user #{user.id}")
