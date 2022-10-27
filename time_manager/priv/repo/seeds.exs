@@ -21,7 +21,7 @@ Faker.start()
 Repo.delete_all(WorkingTime)
 Repo.delete_all(Clocks)
 Repo.delete_all(User)
-for _ <- 1..100 do
+for _ <- 1..10 do
   user = %User{
     email: Faker.Internet.email(),
     username: Faker.Internet.user_name()
@@ -38,13 +38,23 @@ for _ <- 1..100 do
 
   Repo.insert!(clock)
 
-  # Create a working time
-  working_time = %WorkingTime{
-    user: user,
-    start: Faker.DateTime.forward(0),
-    end: Faker.DateTime.forward(0)
-  }
+  working_time_number = :random.uniform(15)
 
-  Repo.insert!(working_time)
+  for i <- 0..working_time_number do
+    IO.puts("Creating working time #{i} for user #{user.id}")
+
+    start_date = Faker.DateTime.backward(365)
+    end_date = start_date |> DateTime.add(24*60*60, :second)
+    end_date = Faker.DateTime.between(start_date, end_date)
+
+    working_time = %WorkingTime{
+      user: user,
+      start: start_date,
+      end: end_date,
+    }
+
+    Repo.insert!(working_time)
+  end
+
 end
 
