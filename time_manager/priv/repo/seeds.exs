@@ -31,7 +31,7 @@ for _ <- 1..100 do
 
   # Create a clock
   clock = %Clocks{
-    user: user.id,
+    user: user,
     time: Faker.DateTime.forward(0),
     status: :rand.uniform(2) == 1
   }
@@ -40,7 +40,7 @@ for _ <- 1..100 do
 
   # Create a working time
   working_time = %WorkingTime{
-    user: user.id,
+    user: user,
     start: Faker.DateTime.forward(0),
     end: Faker.DateTime.forward(0)
   }

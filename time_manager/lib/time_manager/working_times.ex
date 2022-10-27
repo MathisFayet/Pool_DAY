@@ -57,16 +57,16 @@ defmodule TimeManager.WorkingTimes do
 
     cond do
       startDate == nil and endDate == nil ->
-        q = from wkTm in WorkingTime, where: wkTm.user == ^userId
+        q = from wkTm in WorkingTime, where: wkTm.user_id == ^userId
         Repo.all(q)
       startDate == nil and endDate != nil ->
-        q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.end <= ^endDate
+        q = from wkTm in WorkingTime, where: wkTm.user_id == ^userId and wkTm.end <= ^endDate
         Repo.all(q)
       startDate != nil and endDate == nil ->
-        q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.start >= ^startDate
+        q = from wkTm in WorkingTime, where: wkTm.user_id == ^userId and wkTm.start >= ^startDate
         Repo.all(q)
       startDate != nil and endDate != nil ->
-        q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.start >= ^startDate and wkTm.end <= ^endDate
+        q = from wkTm in WorkingTime, where: wkTm.user_id == ^userId and wkTm.start >= ^startDate and wkTm.end <= ^endDate
         Repo.all(q)
     end
   end
@@ -86,7 +86,7 @@ defmodule TimeManager.WorkingTimes do
 
   """
   def get_working_time_by_user_id_and_id!(userId, id) do
-    q = from wkTm in WorkingTime, where: wkTm.user == ^userId and wkTm.id == ^id
+    q = from wkTm in WorkingTime, where: wkTm.user_id == ^userId and wkTm.id == ^id
     Repo.all(q)
   end
 
@@ -102,10 +102,10 @@ defmodule TimeManager.WorkingTimes do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_working_time(userId, attrs \\ %{}) do
+  def create_working_time(attrs \\ %{}) do
     %WorkingTime{}
     |> WorkingTime.changeset(attrs)
-    |> Repo.insert()
+    |>Repo.insert()
   end
 
   @doc """

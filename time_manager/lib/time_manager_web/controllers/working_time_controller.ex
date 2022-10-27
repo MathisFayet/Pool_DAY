@@ -3,6 +3,7 @@ defmodule TimeManagerWeb.WorkingTimeController do
 
   alias TimeManager.WorkingTimes
   alias TimeManager.WorkingTimes.WorkingTime
+  alias TimeManager.Accounts
 
   action_fallback TimeManagerWeb.FallbackController
 
@@ -11,7 +12,6 @@ defmodule TimeManagerWeb.WorkingTimeController do
     startDateStr = Map.get(params, "start", nil)
     endDateStr = Map.get(params, "end", nil)
     formatDateStr = "%Y%m%d%H%M%S"
-    #    formatDateStr = "{YYYY}{MM}{DD}{hh}{mm}{ss}"
     startDate =
       if startDateStr != nil do
         Timex.parse!(startDateStr, formatDateStr, :strftime)
@@ -31,11 +31,20 @@ defmodule TimeManagerWeb.WorkingTimeController do
   end
 
   def create(conn, %{"userID" => userId, "working_time" => working_time_params}) do
+    formatDateStr = "%Y-%m-%d %H:%M:%S"
+    endDate = Timex.parse!(Map.get(working_time_params, "end", nil), formatDateStr, :strftime)
+    startDate = Timex.parse!(Map.get(working_time_params, "start", nil), formatDateStr, :strftime)
+    user = Accounts.get_user!(userId)
+
+    working_time_params = Map.put(working_time_params, "end", endDate)
+    working_time_params = Map.put(working_time_params, "start", startDate)
+    working_time_params = Map.put(working_time_params, "user_id", userId)
+
     with {:ok, %WorkingTime{} = working_time} <-
-           WorkingTimes.create_working_time(userId, working_time_params) do
+           WorkingTimes.create_working_time(user, working_time_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.working_time_path(conn, :show, working_time))
+      |> put_resp_header("location", Routes.working_time_path(conn, :show, working_time, userId))
       |> render("show.json", working_time: working_time)
     end
   end

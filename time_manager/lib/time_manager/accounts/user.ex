@@ -5,7 +5,8 @@ defmodule TimeManager.Accounts.User do
   schema "users" do
     field :username, :string
     field :email, :string
-
+    has_many :clocks, TimeManager.Clock.Clocks
+    has_many :workingTimes, TimeManager.WorkingTimes.WorkingTime
     timestamps()
   end
 
