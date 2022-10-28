@@ -55,6 +55,15 @@ defmodule TimeManagerWeb.Router do
 
   end
 
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "timeManager"
+      }
+    }
+  end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put

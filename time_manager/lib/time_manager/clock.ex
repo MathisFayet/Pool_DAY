@@ -5,7 +5,6 @@ defmodule TimeManager.Clock do
 
   import Ecto.Query, warn: false
   alias TimeManager.Repo
-  alias TimeManager.Accounts.User
   alias TimeManager.WorkingTimes.WorkingTime
 
   alias TimeManager.Clock.Clocks
@@ -114,7 +113,7 @@ defmodule TimeManager.Clock do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_clocks(attrs \\ %{}, userId) do
+  def create_clocks(attrs \\ %{}) do
     %Clocks{}
     |> Clocks.changeset(attrs)
     |> Repo.insert()

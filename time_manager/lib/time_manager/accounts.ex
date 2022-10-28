@@ -5,9 +5,6 @@ defmodule TimeManager.Accounts do
 
   import Ecto.Query, warn: false
   alias TimeManager.Repo
-  alias TimeManager.Clock
-  alias TimeManager.WorkingTimes
-
   alias TimeManager.Accounts.User
 
   @doc """
